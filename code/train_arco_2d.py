@@ -220,9 +220,9 @@ def train(args, snapshot_path):
     isd = ISD(K=args.K, m=0.99, Ts=0.01, Tt=0.1, num_classes=num_classes, latent_pooling_size=args.latent_pooling_size, 
                 latent_feature_size=args.latent_feature_size, output_pooling_size=args.output_pooling_size, 
                 train_encoder=True, train_decoder=True).cuda() # args.train_encoder # args.train_decoder
-    isd.model.load_state_dict(torch.load("../model/{}_{}_labeled{}/{}/iter_30000.pth".format(
+    isd.model.load_state_dict(torch.load("/root/autodl-tmp/model/{}_{}_labeled{}/{}/iter_6000.pth".format(
         args.resume, args.labeled_num, suffix, args.model), map_location=lambda storage, loc: storage))
-    isd.ema_model.load_state_dict(torch.load("../model/{}_{}_labeled{}/{}/iter_30000.pth".format(
+    isd.ema_model.load_state_dict(torch.load("/root/autodl-tmp/model/{}_{}_labeled{}/{}/iter_6000.pth".format(
         args.resume, args.labeled_num, suffix, args.model), map_location=lambda storage, loc: storage))
     if torch.cuda.device_count() > 1:
         isd.data_parallel()
@@ -276,9 +276,9 @@ def train(args, snapshot_path):
         train_u_dataset = iter(train_u_loader)
 
         for i in range(len(train_u_loader)):
-            l_next = train_l_dataset.next()
+            l_next = train_l_dataset.__next__()
             train_l_data, train_l_label = l_next['image'].cuda(), l_next['label'].cuda()
-            u_next = train_u_dataset.next()
+            u_next = train_u_dataset.__next__()
             train_u_data, train_u_label = u_next['image'].cuda(), u_next['label'].cuda()
 
             with torch.no_grad():
